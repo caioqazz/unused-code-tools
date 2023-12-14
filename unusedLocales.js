@@ -82,7 +82,6 @@ function readJsonFile(filePath) {
 // Inicie a verificação no diretório do projeto
 checkProjectForJSFiles(projectDirectory);
 
-
 //const fileName = "SubjectTabLists";
 // Encontrar arquivos não importados
 allJSFiles.forEach((file) => {
@@ -99,15 +98,21 @@ allJSFiles.forEach((file) => {
 
 getLocalesFile(localesDirectory);
 
-allLocales.forEach((file) => {
-  for (const [key] of Object.entries(readJsonFile(file))) {
-    fileAndKey.add({
-      file: file,
-      key: key,
-    });
+const addAllLocales = (data, file) => {
+  for (const [key, value] of Object.entries(data)) {
+    if (typeof value === "object") {
+      addAllLocales(value, file);
+    } else {
+      fileAndKey.add({
+        file: file,
+        key: key,
+      });
+    }
   }
+};
+allLocales.forEach((file) => {
+  addAllLocales(readJsonFile(file), file);
 });
-
 const isUsedKey = (key) => {
   for (const file of allJSFiles) {
     if (hasLocaleKey(file, key)) {
