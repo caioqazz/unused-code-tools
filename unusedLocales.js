@@ -17,8 +17,6 @@ function checkProjectForJSFiles(directory) {
     if (fs.statSync(filePath).isDirectory()) {
       checkProjectForJSFiles(filePath);
     } else if ([".js", ".jsx"].includes(path.extname(file))) {
-      if (filePath.includes(".test")) return;
-      if (filePath.includes(".stories")) return;
       allJSFiles.add(filePath);
     }
   });
@@ -84,10 +82,7 @@ function readJsonFile(filePath) {
 // Inicie a verificação no diretório do projeto
 checkProjectForJSFiles(projectDirectory);
 
-// Processar todos os arquivos para coletar importações
-allJSFiles.forEach((file) => {
-  processFile(file);
-});
+
 //const fileName = "SubjectTabLists";
 // Encontrar arquivos não importados
 allJSFiles.forEach((file) => {
